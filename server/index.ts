@@ -12,6 +12,10 @@ app.get("/api/serverSuggested", function (req, res) {
 	res.send([{ server: "http://localhost:8080", port: 8080, ip: "localhost" }])
 })
 
+app.post("/api/login", (req, res) => {
+	
+})
+
 app.get("/", function (req, res) {
 	res.sendFile(path.join(__dirname, "build", "index.html"))
 })
