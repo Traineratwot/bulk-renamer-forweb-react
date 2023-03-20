@@ -17,6 +17,7 @@
     "open": "^8.4.2",
     "primeicons": "^6.0.1",
     "primereact": "^9.2.1",
+    "qbittorrent-api-v2": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -53,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/qbittorrent-api-v2": "^1.2.0",
     "@types/tcp-port-used": "^1.0.1",
     "install": "0.13.0",
     "npm": "9.6.2",
