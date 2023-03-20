@@ -3,9 +3,12 @@ import bodyParser from "body-parser"
 import path from "path"
 import open from "open"
 import tcpPortUsed from "tcp-port-used"
+import QBT from "./qbt"
 const app = express()
 app.use(express.static(path.join(__dirname, "build")))
 app.use(bodyParser.json({ type: "application/*+json" }))
+
+const qbt = new QBT()
 
 app.get("/api/serverSuggested", function (req, res) {
 	// suggest default server
@@ -13,7 +16,7 @@ app.get("/api/serverSuggested", function (req, res) {
 })
 
 app.post("/api/login", (req, res) => {
-	
+	qbt.login()
 })
 
 app.get("/", function (req, res) {

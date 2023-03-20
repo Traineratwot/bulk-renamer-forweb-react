@@ -1,6 +1,8 @@
-
+import qbt from 'qbittorrent-api-v2'
 
 class QBT {
+	private loggedIn: boolean = false
+	private qbt!: qbt.QBittorrentApiEndpoint
 	// constructor() {}
 
 	public async getTorrents() {
@@ -8,6 +10,7 @@ class QBT {
 	}
 	public async login(host: string, username: string, password: string) {
 		// login
+		this.qbt = await qbt.connect(host, username, password)
 	}
 }
 
