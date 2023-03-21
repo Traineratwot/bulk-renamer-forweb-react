@@ -1,25 +1,43 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import bodyParser from "body-parser"
 import path from "path"
 import open from "open"
 import tcpPortUsed from "tcp-port-used"
 import QBT from "./qbt"
+import { authReqApi, authResApi } from "../API"
+
+interface CustomRequest<T> extends Request {
+	body: T
+}
+
+interface CustomResponse<T> extends Response<T> {
+
+}
+
+let isAuthenticated = false
 const app = express()
 app.use(express.static(path.join(__dirname, "build")))
-app.use(bodyParser.json({ type: "application/*+json" }))
-
+app.use(bodyParser.json())
 const qbt = new QBT()
-
-app.get("/api/serverSuggested", function (req, res) {
+app.get("/api/serverSuggested", function(req, res) {
 	// suggest default server
 	res.send([{ server: "http://localhost:8080", port: 8080, ip: "localhost" }])
 })
 
-app.post("/api/login", (req, res) => {
-	qbt.login()
+app.post("/api/login", (req: CustomRequest<authReqApi>, res: CustomResponse<authResApi>) => {
+	if (!isAuthenticated) {
+		const { host, userName, userPass } = req.body
+		qbt.login(host, userName, userPass).then(console.log).catch(console.error)
+		isAuthenticated = true
+	}
+	res.send({ isAuthenticated: isAuthenticated })
 })
 
-app.get("/", function (req, res) {
+app.post("/api/isAuth", (req, res: CustomResponse<authResApi>) => {
+	res.send({ isAuthenticated: isAuthenticated })
+})
+
+app.get("/", function(req, res) {
 	res.sendFile(path.join(__dirname, "build", "index.html"))
 })
 
@@ -44,4 +62,5 @@ async function start() {
 		open(`http://localhost:${port}`)
 	})
 }
+
 start()
