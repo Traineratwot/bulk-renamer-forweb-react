@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Dropdown } from "primereact/dropdown"
 import "./style/index.scss"
 import { InputText } from "primereact/inputtext"
@@ -7,24 +7,28 @@ import { Password } from "primereact/password"
 import { Button } from "primereact/button"
 
 function App() {
-	const [selectedCity, setSelectedCity] = useState(null)
+	const [selectedServer, setSelectedServer] = useState(null)
 	const [userName, setUserName] = useState<string>("admin")
 	const [userPass, setUserPass] = useState<string>("adminadmin")
-	const cities = [
-		{ name: "http://192.168.50.4:6363", code: "http://192.168.50.4:6363" },
-		{ name: "http://192.168.50.4:6363", code: "http://192.168.50.4:6363" },
-		{ name: "http://192.168.50.4:6363", code: "http://192.168.50.4:6363" },
-		{ name: "http://192.168.50.4:6363", code: "http://192.168.50.4:6363" },
-		{ name: "http://192.168.50.4:6363", code: "http://192.168.50.4:6363" },
-	]
+
+	const [servers, setServers] = useState([])
+	useEffect(() => {
+		fetch("/api/serverSuggested").then(async (response) => {
+			const data = await response.json()
+			setServers(data.map((item: { server: string }) => {
+				return { name: item.server, code: item.server }
+			}))
+		})
+	}, [])
 
 
 	return <>
 		<section className="container">
 			<div className="content">
 				<p>
-					<Dropdown style={{ width: "250px" }} value={selectedCity} onChange={(e) => setSelectedCity(e.value)}
-							  options={cities}
+					<Dropdown style={{ width: "250px" }} value={selectedServer}
+							  onChange={(e) => setSelectedServer(e.value)}
+							  options={servers}
 							  optionLabel="name"
 							  name="server"
 							  editable placeholder="Select a Qb Server" className="w-full md:w-14rem" />
